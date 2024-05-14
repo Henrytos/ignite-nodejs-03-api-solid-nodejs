@@ -32,6 +32,7 @@
     "esbuild": "^0.19.12",
     "execa": "^5.1.1",
     "fast-glob": "^3.3.2",
+    "fastify": "^4.27.0",
     "fastq": "^1.17.1",
     "fill-range": "^7.0.1",
     "foreground-child": "^3.1.1",
