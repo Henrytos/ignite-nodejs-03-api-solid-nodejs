@@ -1,5 +1,6 @@
 import { UsersRepository } from "@/repositories/users-repository"
 import { hash } from "bcryptjs"
+import { UserAlreadyExitsError } from "./errors/user-already-exits-error"
 
 interface RegisterUseCaseRequest{
     name: string
@@ -13,8 +14,9 @@ export class RegisterUseCase{
     async execute({name,email,password}:RegisterUseCaseRequest){
        
         const userWithSameEmail = await this.usersRepository.findByEmail(email)
+        
         if (userWithSameEmail) {
-            throw new Error( 'Email already exists' )
+            throw new UserAlreadyExitsError()
         }
     
         const password_hash  = await hash(password, 6)
