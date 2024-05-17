@@ -1,4 +1,7 @@
-import { registerUseCase } from '@/use-cases/register'
+
+import { InMemoryUsersRepository } from '@/repositories/in-memory-users-repository'
+import { PrismaUsersRepository } from '@/repositories/prisma-users-repository'
+import { RegisterUseCase } from '@/use-cases/register'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
@@ -11,7 +14,10 @@ export async function register(req: FastifyRequest, reply: FastifyReply) {
   const { name, email, password } = registerBodySchema.parse(req.body)
   
   try {
-    await registerUseCase({email ,name ,password })
+    const prismaUsersRepository = new PrismaUsersRepository()
+    //const UsersRepository = new InMemoryUsersRepository()
+    const registerUseCase = new RegisterUseCase(prismaUsersRepository)
+    await registerUseCase.execute({email ,name ,password })
   } catch (error) {
     /**O status de resposta 409 Conflict indica que 
      * a solicitação atual conflitou com 
