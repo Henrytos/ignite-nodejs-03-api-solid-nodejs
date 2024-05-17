@@ -1,5 +1,3 @@
-
-import { InMemoryUsersRepository } from '@/repositories/in-memory-users-repository'
 import { PrismaUsersRepository } from '@/repositories/prisma-users-repository'
 import { RegisterUseCase } from '@/use-cases/register'
 import { FastifyReply, FastifyRequest } from 'fastify'
