@@ -30,8 +30,8 @@ export class CheckInUseCase{
             latitude:userLongitude,
             longitude:userLongitude
         },{
-            latitude:+gym.latitude,
-            longitude:+gym.longitude
+            latitude:gym.latitude.toNumber(),
+            longitude:gym.longitude.toNumber()
         })
 
         const MAX_DISTANCE_IN_KILOMETERS = 0.1
