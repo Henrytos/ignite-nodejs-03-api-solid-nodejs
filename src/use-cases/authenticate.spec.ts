@@ -6,6 +6,7 @@ import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
 
 let usersRepository:InMemoryUsersRepository
 let sut:AuthenticateUseCase
+
 describe('test authenticate user',()=>{
     beforeEach(()=>{
         usersRepository = new InMemoryUsersRepository()

@@ -3,6 +3,19 @@ import { CheckInsRepository } from "../check-ins-repository";
 import { Prisma } from "@prisma/client";
 
 export class PrismaCheckInsRepository implements CheckInsRepository{
+    async findByUserIdOnDate(userId: string, date: Date){
+        const checkInOnSameDate = await prisma.checkIn.findFirst({
+            where:{
+                user_id:userId
+            }
+        }) 
+        
+        if(!checkInOnSameDate){
+            return null
+        }
+
+        return checkInOnSameDate
+    }
     async create(data:Prisma.CheckInUncheckedCreateInput){
         const checkIn = await prisma.checkIn.create({
             data:{

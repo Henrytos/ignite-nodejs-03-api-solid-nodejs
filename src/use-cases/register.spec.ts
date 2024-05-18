@@ -6,7 +6,7 @@ import { UserAlreadyExitsError } from './errors/user-already-exits-error'
 
 let repositoryUsers:InMemoryUsersRepository
 let sut:RegisterUseCase
-describe('teste register user', ()=>{
+describe('teste register use cases ', ()=>{
     beforeEach(()=>{
         repositoryUsers = new InMemoryUsersRepository()
         sut = new RegisterUseCase(repositoryUsers)
