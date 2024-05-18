@@ -34,9 +34,9 @@ export class CheckInUseCase{
             longitude:+gym.longitude
         })
 
-        const MAX_DISTANCE_IN_KILOMETERS = .1
-        
-        if(distance>MAX_DISTANCE_IN_KILOMETERS){
+        const MAX_DISTANCE_IN_KILOMETERS = 0.1
+
+        if(distance > MAX_DISTANCE_IN_KILOMETERS){
             throw new ResourceNotFoundError()
         }
 
