@@ -3,6 +3,7 @@ import { InMemoryCheckInsRepository } from "@/repositories/in-memory/in-memory-c
 import { CheckInUseCase } from "./check-in";
 import { InMemoryGymsRepository } from "@/repositories/in-memory/in-memory-gyms-repository";
 import { Decimal } from "@prisma/client/runtime/library";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
 let checkInsRepository: InMemoryCheckInsRepository
 let gymsRepository: InMemoryGymsRepository
@@ -32,8 +33,7 @@ describe('testing the check in use case',()=>{
     it('should be possible to create a check in', async()=>{
         const {checkIn} = await sut.execute({gymId:'gym-01',userId:'user-01',userLatitude:0,userLongitude:0} )
         expect(checkIn.id).toEqual(expect.any(String))
-    })  
-
+    })   
 
     it('should not be possible not to create two check ins on the same day', async()=>{
         vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
@@ -50,4 +50,18 @@ describe('testing the check in use case',()=>{
         const {checkIn} = await sut.execute({gymId:'gym-01',userId:'user-01', userLatitude:0,userLongitude:0} )
         expect(checkIn.id).toEqual(expect.any(String))
     })  
+
+    it('should be possible not to create a gym outside the maximum distance',async()=>{
+        gymsRepository.items.push({
+            id:'gym-02',
+            title:'socrates',
+            phone:'',
+            description:'',
+            latitude: new Decimal(1000),
+            longitude: new Decimal(1000),
+        })
+        await expect(sut.execute({gymId:'gym-02',userId:'user-01', userLatitude:0,userLongitude:0} )
+        ).rejects.toBeInstanceOf(ResourceNotFoundError)
+
+    })
 })
