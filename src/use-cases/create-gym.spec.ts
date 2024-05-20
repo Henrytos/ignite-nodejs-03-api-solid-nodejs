@@ -1,55 +1,46 @@
-import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { RegisterUseCase } from './register'
-import { compare } from 'bcryptjs'
-import { UserAlreadyExitsError } from './errors/user-already-exits-error'
+import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repository'
+import { CreateGymUseCase } from './create-gym'
 
-let repositoryUsers:InMemoryUsersRepository
-let sut:RegisterUseCase
-describe('teste register use cases ', ()=>{
+let gymsRepository:InMemoryGymsRepository
+let sut:CreateGymUseCase
+describe('test create gym use cases ', ()=>{
     beforeEach(()=>{
-        repositoryUsers = new InMemoryUsersRepository()
-        sut = new RegisterUseCase(repositoryUsers)
+        gymsRepository = new InMemoryGymsRepository()
+        sut = new CreateGymUseCase(gymsRepository)
     })
-    it('should be possible to create a user',async()=>{
-        const { user } = await sut.execute({
-            name:'test',
-            email:'test@example.com',
-            password:'123456',
-        })
-        expect(user.email).toEqual('test@example.com')
-
-    })
-
-    it('should be possible not to register a duplicate email',async()=>{
-        await sut.execute({
-            name:'test',
-            email:'test@example.com',
-            password:'123456',
-        })
-        await expect( sut.execute({
-            name:'test',
-            email:'test@example.com',
-            password:'123456',
-        })).rejects.toBeInstanceOf(UserAlreadyExitsError)
-       
-    })
-    
-    it('should must be possible to encrypt the password',async ()=>{
-        const {user} = await sut.execute({
-            name:'test',
-            email:'test@example.com',
-            password:'123456',
-
-        })
    
-        const isPasswordCorrectlyHashed = await compare(
-            '123456',
-            user.password_hash,
-          )
 
-         expect(isPasswordCorrectlyHashed).toBe(true)
-
+    it('should create two gyms',async ()=>{
+        await gymsRepository.create({
+            latitude: 1000001,
+            longitude: 1000001,
+            title: 'javascript gym 1',
+        })
+        await gymsRepository.create({
+            latitude: 1000001,
+            longitude: 1000001,
+            title: 'javascript gym 2',
+        })
+        expect(gymsRepository.items).toEqual([
+            expect.objectContaining({
+                title: 'javascript gym 1',
+            }),
+            expect.objectContaining({
+                title: 'javascript gym 2',
+            }),
+        ])
     })
-
+    it('should to create gym', async () => {
+        const { gym } = await sut.execute({
+            title: 'JavaScript Gym',
+            description: null,
+            phone: null,
+            latitude: -27.2092052,
+            longitude: -49.6401091,
+            })
+        
+        expect(gym.id).toEqual(expect.any(String)) 
+          
+    })
 })
