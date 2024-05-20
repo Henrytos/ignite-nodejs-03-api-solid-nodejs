@@ -3,19 +3,20 @@ import { InMemoryCheckInsRepository } from "@/repositories/in-memory/in-memory-c
 import { CheckInUseCase } from "./check-in";
 import { InMemoryGymsRepository } from "@/repositories/in-memory/in-memory-gyms-repository";
 import { Decimal } from "@prisma/client/runtime/library";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { MaxDistanceError } from "./errors/max-distance-error";
+import { MaxNumberCheckInsError } from "./errors/max-number-of-check-ins-error";
 
 let checkInsRepository: InMemoryCheckInsRepository
 let gymsRepository: InMemoryGymsRepository
 let sut: CheckInUseCase
 
 describe('testing the check in use case',()=>{
-    beforeEach(()=>{
+    beforeEach(async ()=>{
         checkInsRepository = new InMemoryCheckInsRepository()
         gymsRepository = new InMemoryGymsRepository()
         sut = new CheckInUseCase(checkInsRepository, gymsRepository)
 
-        gymsRepository.items.push({
+        await gymsRepository.create({
             id:'gym-01',
             title:'liceu',
             phone:'',
@@ -23,6 +24,7 @@ describe('testing the check in use case',()=>{
             latitude: new Decimal(0),
             longitude: new Decimal(0),
         })
+        
         vi.useFakeTimers()
     })  
 
@@ -39,7 +41,7 @@ describe('testing the check in use case',()=>{
         vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
         await sut.execute({gymId:'gym-01',userId:'user-01', userLatitude:0,userLongitude:0} )
         await expect(sut.execute({gymId:'gym-01',userId:'user-01', userLatitude:0,userLongitude:0} )
-        ).rejects.toBeInstanceOf(Error)
+        ).rejects.toBeInstanceOf(MaxNumberCheckInsError)
     })  
 
     it('should be possible to create two check ins on different days ', async()=>{
@@ -61,7 +63,7 @@ describe('testing the check in use case',()=>{
             longitude: new Decimal(1000),
         })
         await expect(sut.execute({gymId:'gym-02',userId:'user-01', userLatitude:0,userLongitude:0} )
-        ).rejects.toBeInstanceOf(ResourceNotFoundError)
+        ).rejects.toBeInstanceOf(MaxDistanceError)
 
     })
 })
