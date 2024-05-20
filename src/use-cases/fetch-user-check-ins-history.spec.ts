@@ -1,16 +1,16 @@
 import { CheckInsRepository } from "@/repositories/check-ins-repository";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { FetchUserCheckInsHistory } from "./fetch-user-check-ins-history";
+import { FetchUserCheckInsHistoryUseCase } from "./fetch-user-check-ins-history";
 import { InMemoryCheckInsRepository } from "@/repositories/in-memory/in-memory-check-ins-repository";
 
 let checkInsRepository:CheckInsRepository
-let sut:FetchUserCheckInsHistory
+let sut:FetchUserCheckInsHistoryUseCase
 
 describe('testing the fetch user check ins history use case',()=>{
     
     beforeEach(()=>{
         checkInsRepository = new InMemoryCheckInsRepository()
-        sut = new FetchUserCheckInsHistory(checkInsRepository)
+        sut = new FetchUserCheckInsHistoryUseCase(checkInsRepository)
     })
 
     afterEach(()=>{
@@ -53,7 +53,7 @@ describe('testing the fetch user check ins history use case',()=>{
             userId:'user-01',
             page:2
         })
-        
+
         expect(checkIns).toEqual([
             expect.objectContaining({
                 gym_id:'gym-21',
