@@ -10,10 +10,10 @@ GymPass style app.
 - [ x ] Deve ser possível obter o número de check-ins realizados pelo usuário logado;
 - [ x ] Deve ser possível o usuário obter o seu histórico de check-ins;
 - [ ] Deve ser possível o usuário buscar academias próximas (até 10km);
-- [ ] Deve ser possível o usuário buscar academias pelo nome;
+- [ x ] Deve ser possível o usuário buscar academias pelo nome;
 - [ x ] Deve ser possível o usuário realizar check-in em uma academia;
 - [ ] Deve ser possível validar o check-in de um usuário;
-- [ ] Deve ser possível cadastrar uma academia;
+- [ x ] Deve ser possível cadastrar uma academia;
 
 ## RNs (Regras de negócio)
 
