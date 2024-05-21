@@ -5,25 +5,36 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
-  
-    const authenticateBodySchema = z.object({
+
+  const authenticateBodySchema = z.object({
     email: z.string().email(),
     password: z.string().min(6),
   })
 
-  const {  email, password } = authenticateBodySchema.parse(req.body)
-  
+  const { email, password } = authenticateBodySchema.parse(req.body)
+
   try {
     const authenticateUseCase = makeAuthenticateUseCase()
-    await authenticateUseCase.execute({email,password })
+    const { user } = await authenticateUseCase.execute({ email, password })
+
+    const token = await reply.jwtSign({},
+      {
+        sign: {
+          sub: user.id
+        }
+      }
+    )
+    return reply.status(200).send({
+      token
+    })
 
   } catch (error) {
-    if( error instanceof InvalidCredentialsError){
-      return reply.status(409).send({message:error.message}) 
+    if (error instanceof InvalidCredentialsError) {
+      return reply.status(409).send({ message: error.message })
     }
 
-    throw error 
+    throw error
   }
 
-  return reply.status(200).send()
+
 }
