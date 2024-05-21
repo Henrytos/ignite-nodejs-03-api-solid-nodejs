@@ -10,13 +10,13 @@ export async function register(req: FastifyRequest, reply: FastifyReply) {
     password: z.string().min(6),
   })
   const { name, email, password } = registerBodySchema.parse(req.body)
-  
+
   try {
     const registerUseCase = makeRegisterUseCase()
-    await registerUseCase.execute({email ,name ,password })
+    await registerUseCase.execute({ email, name, password })
   } catch (error) {
-    if( error instanceof UserAlreadyExitsError){
-      return reply.status(409).send({message:error.message}) //conflito
+    if (error instanceof UserAlreadyExitsError) {
+      return reply.status(409).send({ message: error.message }) //conflito
     }
     throw error //jogando pra camada de cima
   }
