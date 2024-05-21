@@ -1,13 +1,36 @@
+import 'dotenv/config'
+import { randomUUID } from 'crypto'
 import type { Environment } from 'vitest'
+import { execSync } from 'node:child_process'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+//postgresql://docker:docker@localhost:5432/ignitenode03?schema=public
+
+function generateDatabaseUrl(schema: string) {
+    if (!process.env.DATABASE_URL) {
+        throw new Error('please inform the DATABASE_URL environment variable')
+    }
+
+    const url = new URL('postgresql://docker:docker@localhost:5432/ignitenode03')
+    url.searchParams.set('schema', schema)
+    return url.toString()
+
+}
 
 export default <Environment>{
     name: 'custom',
     transformMode: 'ssr',
     setup() {
-        console.log('setup environment')
+        const schema = randomUUID()
+        const databaseUrl = generateDatabaseUrl(schema)
+        process.env.DATABASE_URL = databaseUrl
+        execSync(`npx prisma migrate `)
         return {
-            teardown() {
-                console.log('teardown environment')
+            async teardown() {
+                await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`)
+                await prisma.$disconnect()
             }
         }
     }
