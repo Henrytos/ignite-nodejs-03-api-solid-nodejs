@@ -13,7 +13,7 @@ function generateDatabaseUrl(schema: string) {
         throw new Error('please inform the DATABASE_URL environment variable')
     }
 
-    const url = new URL('postgresql://docker:docker@localhost:5432/ignitenode03')
+    const url = new URL(process.env.DATABASE_URL)
     url.searchParams.set('schema', schema)
     return url.toString()
 
@@ -27,7 +27,7 @@ export default <Environment>{
         const databaseUrl = generateDatabaseUrl(schema)
 
         process.env.DATABASE_URL = databaseUrl
-        execSync(`npx prisma migrate `)
+        execSync(`npx prisma migrate deploy`)
 
         return {
             async teardown() {
