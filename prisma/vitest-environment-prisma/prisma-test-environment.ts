@@ -25,8 +25,10 @@ export default <Environment>{
     setup() {
         const schema = randomUUID()
         const databaseUrl = generateDatabaseUrl(schema)
+
         process.env.DATABASE_URL = databaseUrl
         execSync(`npx prisma migrate `)
+
         return {
             async teardown() {
                 await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`)
