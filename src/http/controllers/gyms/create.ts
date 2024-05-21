@@ -14,11 +14,13 @@ export async function create(req: FastifyRequest, reply: FastifyReply) {
             return Math.abs(value) <= 180
         }),
     })
+
     const { title, description, phone, latitude, longitude } = createGymBodySchema.parse(req.body)
 
     const createGymUseCase = makeCreateGymUseCase()
     await createGymUseCase.execute({
         title, description, phone, latitude, longitude
     })
+
     return reply.status(201).send()
 }
