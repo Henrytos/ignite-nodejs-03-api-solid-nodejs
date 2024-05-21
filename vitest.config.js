@@ -6,6 +6,7 @@ export default defineConfig({
   test: {
     coverage: {
       include: ["src/use-cases", "src/repositories"],
+      exclude: ["src/use-cases/factories", "src/repositories/prisma"],
     },
   },
 });
