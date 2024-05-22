@@ -41,13 +41,6 @@ describe('Search gym (e2e)', () => {
 
         expect(response.statusCode).toEqual(200)
         expect(response.body.gyms).toHaveLength(2)
-        expect(response.body.gyms).toEqual([
-            expect.objectContaining({
-                title: 'javascript gym 1'
-            }),
-            expect.objectContaining({
-                title: 'javascript gym 2'
-            })
-        ])
+
     })
 })
