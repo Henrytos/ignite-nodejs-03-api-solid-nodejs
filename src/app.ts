@@ -10,13 +10,13 @@ import fastifyCookie from '@fastify/cookie'
 export const app = fastify()
 
 app.register(fastifyJwt, {
-    secret: env.JWT_SECRET,
+    secret: env.JWT_SECRET,//chave secreta
     cookie: {
         cookieName: 'refreshToken',
-        signed: false
+        signed: false//não é assinado
     },
     sign: {
-        expiresIn: '10m'
+        expiresIn: '10m'//data de defaut de expiração
     }
 
 })

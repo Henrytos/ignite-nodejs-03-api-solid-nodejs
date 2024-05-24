@@ -17,15 +17,19 @@ export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
     const authenticateUseCase = makeAuthenticateUseCase()
     const { user } = await authenticateUseCase.execute({ email, password })
 
-    const token = await reply.jwtSign({},
+    const token = await reply.jwtSign({
+      role: user.role,
+    },
       {
         sign: {
-          sub: user.id
+          sub: user.id,
         }
       }
     )
 
-    const refreshToken = await reply.jwtSign({},
+    const refreshToken = await reply.jwtSign({
+      role: user.role,
+    },
       {
         sign: {
           sub: user.id,
@@ -36,10 +40,10 @@ export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
 
     return reply.status(200)
       .setCookie('refreshToken', refreshToken, {
-        path: '/',//somente neste dominio 
-        httpOnly: true,//só visivel pro back 
-        secure: true,//seguro e criptografado  
-        sameSite: true//somente neste site 
+        path: '/',//verify domain
+        httpOnly: true,//not util javascript front 
+        secure: true,//only https
+        sameSite: true//only same domain 
       })
       .send({
         token

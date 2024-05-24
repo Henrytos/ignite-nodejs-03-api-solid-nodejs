@@ -1,5 +1,8 @@
 {
     "cSpell.enableFiletypes": [
         "!jsonc"
+    ],
+    "cSpell.words": [
+        "Fastify"
     ]
 }
