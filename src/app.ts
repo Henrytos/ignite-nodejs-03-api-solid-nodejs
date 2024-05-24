@@ -22,6 +22,8 @@ app.register(fastifyJwt, {
 })
 app.register(fastifyCookie)
 
+
+
 app.register(usersRoutes)
 app.register(gymsRoutes)
 app.register(checkInsRoutes)
