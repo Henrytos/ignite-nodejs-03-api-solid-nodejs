@@ -1,5 +1,4 @@
-
-NAME: run test units
+name: run test units
 
 on: [push]
 
@@ -13,8 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      
-      -run: npm ci
-      
-      -run: npm run test
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test
       
