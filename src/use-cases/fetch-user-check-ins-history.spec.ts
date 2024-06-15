@@ -1,22 +1,21 @@
 import { CheckInsRepository } from "@/repositories/check-ins-repository";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { FetchUserCheckInsHistoryUseCase } from "./fetch-user-check-ins-history";
 import { InMemoryCheckInsRepository } from "@/repositories/in-memory/in-memory-check-ins-repository";
 
-let checkInsRepository:CheckInsRepository
-let sut:FetchUserCheckInsHistoryUseCase
+let checkInsRepository: CheckInsRepository
+let sut: FetchUserCheckInsHistoryUseCase
 
-describe('testing the fetch user check ins history use case',()=>{
-    
-    beforeEach(()=>{
+describe('testing the fetch user check ins history use case', () => {
+
+    beforeEach(() => {
         checkInsRepository = new InMemoryCheckInsRepository()
         sut = new FetchUserCheckInsHistoryUseCase(checkInsRepository)
     })
 
-    afterEach(()=>{
+    afterEach(() => {
     })
 
-    it('should be two check ins history',async ()=>{
+    it('should be two check ins history', async () => {
         await checkInsRepository.create({
             gym_id: 'gym-01',
             user_id: 'user-01',
@@ -27,8 +26,8 @@ describe('testing the fetch user check ins history use case',()=>{
         })
 
         const { checkIns } = await sut.execute({
-            userId:'user-01',
-            page:1
+            userId: 'user-01',
+            page: 1
         })
 
         expect(checkIns).toEqual([
@@ -40,26 +39,26 @@ describe('testing the fetch user check ins history use case',()=>{
             })
         ])
     })
-    it('should get second check ins page',async ()=>{
-        
-        for(let i = 1 ; i<=22; i++){
+    it('should get second check ins page', async () => {
+
+        for (let i = 1; i <= 22; i++) {
             await checkInsRepository.create({
                 gym_id: `gym-${i}`,
                 user_id: 'user-01',
             })
         }
-       
+
         const { checkIns } = await sut.execute({
-            userId:'user-01',
-            page:2
+            userId: 'user-01',
+            page: 2
         })
 
         expect(checkIns).toEqual([
             expect.objectContaining({
-                gym_id:'gym-21',
+                gym_id: 'gym-21',
             }),
             expect.objectContaining({
-                gym_id:'gym-22',
+                gym_id: 'gym-22',
             })
         ])
     })

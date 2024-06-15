@@ -10,5 +10,6 @@ export default defineConfig({
     },
     environmentMatchGlobs: [["src/http/controllers/**", "prisma"]],
     dir: "src",
+    globals: true,
   },
 });
