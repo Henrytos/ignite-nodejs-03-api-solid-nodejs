@@ -1,7 +1,6 @@
 import { test } from 'vitest'
 import request from 'supertest'
 import { app } from '@/app'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
 
 describe('Create Gym (e2e)', () => {
